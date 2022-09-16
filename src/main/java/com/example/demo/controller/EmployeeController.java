@@ -4,6 +4,7 @@ import com.example.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.entity.Employee;
+import org.springframework.web.client.RestTemplate;
 
 
 import java.util.List;
@@ -14,8 +15,14 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
+    private final String URL = "http://localhost:9092/employees";
+
     @PostMapping("/employees")
     public Employee saveEmployee(@RequestBody Employee employee) {
+        Employee eu = restTemplate.postForObject(URL, employee, Employee.class);
         return employeeService.saveEmployee(employee);
     }
 
